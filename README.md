@@ -6,6 +6,7 @@ Terraform configuration for building an ArangoDB Cluster in Google Compute
 ### Prereqs
 
 You need to [install Terraform](https://www.terraform.io/intro/getting-started/install.html)
+
 You need to add an env var like:
 
     GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/application_default_credentials.json
