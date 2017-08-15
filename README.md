@@ -25,8 +25,12 @@ Copy example.tfvars to cluster.tfvars and update as appropriate:
     
 ### Plan
 
+Check out what's going to happen with:
+
     terraform plan -var-file cluster.tfvars
 
 ### Apply
+
+Create the cluster with:
 
     terraform plan -var-file cluster.tfvars
