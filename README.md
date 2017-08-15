@@ -23,12 +23,14 @@ Copy example.tfvars to cluster.tfvars and update as appropriate:
     gce_region = "europe-west1"
     cluster_name = "mycluster"
     arangodb_password = "changeme"
-    
+
+
 ### Plan
 
 Check out what's going to happen with:
 
     terraform plan -var-file cluster.tfvars
+
 
 ### Apply
 
