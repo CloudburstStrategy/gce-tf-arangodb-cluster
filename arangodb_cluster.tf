@@ -118,7 +118,7 @@ resource "google_compute_instance" "hosta" {
       "chmod +x /tmp/setupdisk.sh",
       "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${self.network_interface.0.address}",
+      "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address}",
     ]
   }
 }
