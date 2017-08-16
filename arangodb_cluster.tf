@@ -111,12 +111,13 @@ resource "google_compute_instance" "hosta" {
     destination = "/tmp/start.sh"
   }
 
+  # Start Master ArangoDB
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setupdisk.sh",
       "/tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${google_compute_address.ipa.address} ${google_compute_address.ipa.address} ${var.arangodb_password}",
+      "/tmp/start.sh ${var.arangodb_password} ${google_compute_address.ipa.address}",
     ]
   }
 }
@@ -170,12 +171,13 @@ resource "google_compute_instance" "hostb" {
     destination = "/tmp/start.sh"
   }
 
+  # Start Slave ArangoDB and connect to Master on hosta
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setupdisk.sh",
       "/tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${google_compute_address.ipb.address} ${google_compute_address.ipa.address} ${var.arangodb_password}",
+      "/tmp/start.sh ${var.arangodb_password} ${google_compute_address.ipb.address} ${google_compute_address.ipa.address}",
     ]
   }
 }
@@ -229,12 +231,13 @@ resource "google_compute_instance" "hostc" {
     destination = "/tmp/start.sh"
   }
 
+  # Start slave ArangoDBstarter and connect to master on hosta
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setupdisk.sh",
       "/tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${google_compute_address.ipc.address} ${google_compute_address.ipa.address} ${var.arangodb_password}",
+      "/tmp/start.sh ${var.arangodb_password} ${google_compute_address.ipc.address} ${google_compute_address.ipa.address}",
     ]
   }
 }
