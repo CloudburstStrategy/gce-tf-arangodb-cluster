@@ -1,6 +1,6 @@
 gce_project = "my-google-project"
 gce_region = "europe-west3"
 gce_machine_type = "n1-standard-2"
-gce_ssh_user = "user"
-cluster_name = "mycluster"
+gce_ssh_user = "yourname"
+cluster_name = "yourcluster"
 arangodb_password = "changeme"

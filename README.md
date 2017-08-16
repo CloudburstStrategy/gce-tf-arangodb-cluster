@@ -5,6 +5,9 @@ Terraform configuration for building an ArangoDB Cluster in Google Compute
 
 See https://github.com/arangodb-helper/arangodb#running-in-docker for more info
 
+This terraform configuration will create a 3 host cluster with a single host in each of zones a,b & c in the required region. 
+Some regions don't have zone a so that might cause a failure, simply switch hosta to be in zone d :-).
+
 ### Prereqs
 
 You need to [install Terraform](https://www.terraform.io/intro/getting-started/install.html)

@@ -111,13 +111,15 @@ resource "google_compute_instance" "hosta" {
     destination = "/tmp/start.sh"
   }
 
-  # Start Master ArangoDB
+  # Mount persistent disk then start master ArangoDBStarter but detatch from terminal
+  # otherwise hosta won't finish provisioning and the following hosts need to know it's ip
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setupdisk.sh",
-      "/tmp/setupdisk.sh",
+      "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${var.arangodb_password} ${google_compute_address.ipa.address}",
+      "echo 'Starting master ArangoDB and writing output to /tmp/adb.log'",
+      "nohup /tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} > /tmp/adb.log 2>&1 &",
     ]
   }
 }
@@ -175,9 +177,10 @@ resource "google_compute_instance" "hostb" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setupdisk.sh",
-      "/tmp/setupdisk.sh",
+      "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${var.arangodb_password} ${google_compute_address.ipb.address} ${google_compute_address.ipa.address}",
+      "echo 'Starting slave ArangoDB and writing output to /tmp/adb.log'",
+      "nohup /tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address} > /tmp/adb.log 2>&1 &"
     ]
   }
 }
@@ -235,9 +238,10 @@ resource "google_compute_instance" "hostc" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/setupdisk.sh",
-      "/tmp/setupdisk.sh",
+      "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${var.arangodb_password} ${google_compute_address.ipc.address} ${google_compute_address.ipa.address}",
+      "echo 'Starting ArangoDB slave and writing output to /tmp/adb.log'",
+      "nohup /tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address} > /tmp/adb.log 2>&1 &"
     ]
   }
 }
