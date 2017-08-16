@@ -8,9 +8,9 @@ docker pull arangodb/arangodb-starter
 
 if [ -z $MASTER_IP ]; then
 
-echo "Starting Master ArangoDB on ip $MY_IP";
+echo "Starting Master ArangoDB on ip $MY_IP for logs use: docker logs adb";
 
-nohup docker run -d --name=adb --rm -p 8528:8528 \
+docker run -d --name=adb --rm -p 8528:8528 \
     -v /mnt/disks/db/data:/data \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -e ARANGO_ROOT_PASSWORD=$PASSWORD \
@@ -20,7 +20,7 @@ nohup docker run -d --name=adb --rm -p 8528:8528 \
 
 else
 
-echo "Starting Slave ArangoDB on ip $MY_IP connecting to master on $MASTER_IP";
+echo "Starting Slave ArangoDB on ip $MY_IP connecting to master on $MASTER_IP docker logs adb";
 
 docker run -d --name=adb --rm -p 8528:8528 \
     -v /mnt/disks/db/data:/data \

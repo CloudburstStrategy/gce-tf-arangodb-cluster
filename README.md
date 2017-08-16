@@ -10,9 +10,17 @@ Some regions don't have zone a so that might cause a failure, simply switch host
 
 ### Prereqs
 
-You need to [install Terraform](https://www.terraform.io/intro/getting-started/install.html)
+Install [Google Cloud SDK](https://cloud.google.com/sdk/) - could be via [homebrew](http://macappstore.org/google-cloud-sdk/)
 
-You need to add an env var like:
+Create a [Google Cloud Project](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
+ 
+Authenticate with your project locally:
+
+    gcloud config set project <yourproject> && gcloud auth login
+
+Install [Terraform](https://www.terraform.io/intro/getting-started/install.html)
+
+Add an env var to point to your local credentials like:
 
     GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/application_default_credentials.json
 

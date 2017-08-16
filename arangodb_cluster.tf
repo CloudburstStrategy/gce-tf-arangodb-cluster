@@ -118,8 +118,7 @@ resource "google_compute_instance" "hosta" {
       "chmod +x /tmp/setupdisk.sh",
       "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "echo 'Starting master ArangoDB and writing output to /tmp/adb.log'",
-      "nohup /tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} > /tmp/adb.log 2>&1 &",
+      "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${self.network_interface.0.address}",
     ]
   }
 }
@@ -179,8 +178,7 @@ resource "google_compute_instance" "hostb" {
       "chmod +x /tmp/setupdisk.sh",
       "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "echo 'Starting slave ArangoDB and writing output to /tmp/adb.log'",
-      "nohup /tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address} > /tmp/adb.log 2>&1 &"
+      "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address}"
     ]
   }
 }
@@ -240,8 +238,7 @@ resource "google_compute_instance" "hostc" {
       "chmod +x /tmp/setupdisk.sh",
       "sudo /tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "echo 'Starting ArangoDB slave and writing output to /tmp/adb.log'",
-      "nohup /tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address} > /tmp/adb.log 2>&1 &"
+      "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address}"
     ]
   }
 }
