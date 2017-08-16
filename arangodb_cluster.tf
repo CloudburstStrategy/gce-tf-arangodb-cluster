@@ -1,7 +1,20 @@
 variable "gce_project" {}
-variable "gce_region" {}
-variable "gce_machine_type" {}
-variable "cluster_name" {}
+variable "gce_region" {
+  default = "europe-west3"
+}
+variable "gce_machine_type" {
+  default = "n1-standard-2"
+}
+variable "gce_ssh_user" {}
+variable "gce_ssh_public_key_file" {
+  default = "~/.ssh/google_compute_engine.pub"
+}
+variable "gce_ssh_private_key_file" {
+  default = "~/.ssh/google_compute_engine"
+}
+variable "cluster_name" {
+  default = "test"
+}
 variable "arangodb_password" {}
 
 # Configure the provider
@@ -73,7 +86,20 @@ resource "google_compute_instance" "hosta" {
     }
   }
 
+  metadata {
+    sshKeys = "${var.gce_ssh_user}:${file(var.gce_ssh_public_key_file)}"
+  }
+
   tags = ["arangodb"]
+
+  # define default connection for remote provisioners
+  connection {
+    type = "ssh"
+    agent = false
+    user = "${var.gce_ssh_user}"
+    private_key = "${file("${var.gce_ssh_private_key_file}")}"
+    timeout = "5m"
+  }
 
   provisioner "file" {
     source      = "scripts/setupdisk.sh"
@@ -90,13 +116,8 @@ resource "google_compute_instance" "hosta" {
       "chmod +x /tmp/setupdisk.sh",
       "/tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${google_compute_address.ipa.address} ${google_compute_address.ipb.address} ${google_compute_address.ipc.address}",
+      "/tmp/start.sh ${google_compute_address.ipa.address} ${google_compute_address.ipa.address} ${var.arangodb_password}",
     ]
-
-    connection {
-      type     = "ssh"
-      timeout  = "10m"
-    }
   }
 }
 
@@ -124,7 +145,20 @@ resource "google_compute_instance" "hostb" {
     }
   }
 
+  metadata {
+    sshKeys = "${var.gce_ssh_user}:${file(var.gce_ssh_public_key_file)}"
+  }
+
   tags = ["arangodb"]
+
+  # define default connection for remote provisioners
+  connection {
+    type = "ssh"
+    agent = false
+    user = "${var.gce_ssh_user}"
+    private_key = "${file("${var.gce_ssh_private_key_file}")}"
+    timeout = "5m"
+  }
 
   provisioner "file" {
     source      = "scripts/setupdisk.sh"
@@ -141,13 +175,8 @@ resource "google_compute_instance" "hostb" {
       "chmod +x /tmp/setupdisk.sh",
       "/tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${google_compute_address.ipa.address} ${google_compute_address.ipb.address} ${google_compute_address.ipc.address}",
+      "/tmp/start.sh ${google_compute_address.ipb.address} ${google_compute_address.ipa.address} ${var.arangodb_password}",
     ]
-
-    connection {
-      type     = "ssh"
-      timeout  = "10m"
-    }
   }
 }
 
@@ -175,7 +204,20 @@ resource "google_compute_instance" "hostc" {
     }
   }
 
+  metadata {
+    sshKeys = "${var.gce_ssh_user}:${file(var.gce_ssh_public_key_file)}"
+  }
+
   tags = ["arangodb"]
+
+  # define default connection for remote provisioners
+  connection {
+    type = "ssh"
+    agent = false
+    user = "${var.gce_ssh_user}"
+    private_key = "${file("${var.gce_ssh_private_key_file}")}"
+    timeout = "5m"
+  }
 
   provisioner "file" {
     source      = "scripts/setupdisk.sh"
@@ -192,12 +234,7 @@ resource "google_compute_instance" "hostc" {
       "chmod +x /tmp/setupdisk.sh",
       "/tmp/setupdisk.sh",
       "chmod +x /tmp/start.sh",
-      "/tmp/start.sh ${google_compute_address.ipa.address} ${google_compute_address.ipb.address} ${google_compute_address.ipc.address}",
+      "/tmp/start.sh ${google_compute_address.ipc.address} ${google_compute_address.ipa.address} ${var.arangodb_password}",
     ]
-
-    connection {
-      type     = "ssh"
-      timeout  = "10m"
-    }
   }
 }

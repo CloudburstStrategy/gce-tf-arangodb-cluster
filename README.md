@@ -3,6 +3,8 @@ Terraform an ArangoDB Cluster in Google Compute Engine
 
 Terraform configuration for building an ArangoDB Cluster in Google Compute
 
+See https://github.com/arangodb-helper/arangodb#running-in-docker for more info
+
 ### Prereqs
 
 You need to [install Terraform](https://www.terraform.io/intro/getting-started/install.html)
@@ -25,15 +27,18 @@ Copy example.tfvars to cluster.tfvars and update as appropriate:
     arangodb_password = "changeme"
 
 
-### Plan
+# Terraform Commands
 
 Check out what's going to happen with:
 
     terraform plan -var-file cluster.tfvars
 
 
-### Apply
-
 Create the cluster with:
 
-    terraform plan -var-file cluster.tfvars
+    terraform apply -var-file cluster.tfvars
+    
+    
+Destroy the cluster with:
+
+    terraform destroy -var-file cluster.tfvars
