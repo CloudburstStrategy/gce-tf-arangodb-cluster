@@ -14,9 +14,3 @@ echo UUID=`sudo blkid -s UUID -o value /dev/sdb` /mnt/disks/db ext4 discard,defa
 # Create persistent directories for ArangoDB to store data and apps
 mkdir -p /mnt/disks/db/data
 chmod a+rwx /mnt/disks/db/data
-
-mkdir -p /mnt/disks/db/arangodb3
-chmod a+rwx /mnt/disks/db/arangodb3
-
-mkdir -p /mnt/disks/db/arangodb3-apps
-chmod a+rwx /mnt/disks/db/arangodb3-apps
