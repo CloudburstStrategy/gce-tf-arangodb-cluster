@@ -53,3 +53,11 @@ Create the cluster with:
 Destroy the cluster with:
 
     terraform destroy -var-file cluster.tfvars
+    
+    
+TODO
+====
+
+Currently there is an issue with the master starter:
+
+            2017-08-17T08:40:24Z [1] ERROR {cluster} ClusterComm::performRequests: got no answer from shard:s10027:/_db/_system/_api/document?collection=s10027&waitForSync=false&returnNew=false&returnOld=false with error 4
