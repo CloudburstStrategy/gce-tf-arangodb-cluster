@@ -14,3 +14,6 @@ echo UUID=`sudo blkid -s UUID -o value /dev/sdb` /mnt/disks/db ext4 discard,defa
 # Create persistent directories for ArangoDB to store data and apps
 mkdir -p /mnt/disks/db/data
 chmod a+rwx /mnt/disks/db/data
+
+# Add firewall rule to allow incoming communication
+iptables -I INPUT -p tcp -m tcp --dport 8528:8531 -j ACCEPT

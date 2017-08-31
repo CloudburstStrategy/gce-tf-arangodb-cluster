@@ -20,7 +20,7 @@ docker run -d --name=adb --rm -p 8528:8528 \
 
 else
 
-echo "Starting Slave ArangoDB on ip $MY_IP connecting to master on $MASTER_IP docker logs adb";
+echo "Starting Slave ArangoDB on ip $MY_IP connecting to master on $MASTER_IP for logs use: docker logs adb";
 
 docker run -d --name=adb --rm -p 8528:8528 \
     -v /mnt/disks/db/data:/data \

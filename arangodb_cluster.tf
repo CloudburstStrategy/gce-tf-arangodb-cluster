@@ -5,6 +5,9 @@ variable "gce_region" {
 variable "gce_machine_type" {
   default = "n1-standard-2"
 }
+variable "gce_os_image" {
+  default = "cos-cloud/cos-stable"
+}
 variable "gce_ssh_user" {}
 variable "gce_ssh_public_key_file" {
   default = "~/.ssh/google_compute_engine.pub"
@@ -25,7 +28,7 @@ provider "google" {
 
 # Allow access from internet to ArangoDB web admin console
 resource "google_compute_firewall" "default" {
-  name    = "arangodb-graph-rule"
+  name    = "arangodb-graph-rule-cluster"
   network = "default"
 
   allow {
@@ -69,7 +72,7 @@ resource "google_compute_instance" "hosta" {
 
   boot_disk {
     initialize_params {
-      image = "cos-cloud/cos-stable"
+      image = "${var.gce_os_image}"
       size = 10
     }
   }
@@ -102,8 +105,8 @@ resource "google_compute_instance" "hosta" {
   }
 
   provisioner "file" {
-    source      = "scripts/setupdisk.sh"
-    destination = "/tmp/setupdisk.sh"
+    source      = "scripts/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "file" {
@@ -115,8 +118,8 @@ resource "google_compute_instance" "hosta" {
   # otherwise hosta won't finish provisioning and the following hosts need to know it's ip
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/setupdisk.sh",
-      "sudo /tmp/setupdisk.sh",
+      "chmod +x /tmp/setup.sh",
+      "sudo /tmp/setup.sh",
       "chmod +x /tmp/start.sh",
       "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address}",
     ]
@@ -130,7 +133,7 @@ resource "google_compute_instance" "hostb" {
 
   boot_disk {
     initialize_params {
-      image = "cos-cloud/cos-stable"
+      image = "${var.gce_os_image}"
       size = 10
     }
   }
@@ -163,8 +166,8 @@ resource "google_compute_instance" "hostb" {
   }
 
   provisioner "file" {
-    source      = "scripts/setupdisk.sh"
-    destination = "/tmp/setupdisk.sh"
+    source      = "scripts/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "file" {
@@ -175,8 +178,8 @@ resource "google_compute_instance" "hostb" {
   # Start Slave ArangoDB and connect to Master on hosta
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/setupdisk.sh",
-      "sudo /tmp/setupdisk.sh",
+      "chmod +x /tmp/setup.sh",
+      "sudo /tmp/setup.sh",
       "chmod +x /tmp/start.sh",
       "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address}"
     ]
@@ -190,7 +193,7 @@ resource "google_compute_instance" "hostc" {
 
   boot_disk {
     initialize_params {
-      image = "cos-cloud/cos-stable"
+      image = "${var.gce_os_image}"
       size = 10
     }
   }
@@ -223,8 +226,8 @@ resource "google_compute_instance" "hostc" {
   }
 
   provisioner "file" {
-    source      = "scripts/setupdisk.sh"
-    destination = "/tmp/setupdisk.sh"
+    source      = "scripts/setup.sh"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "file" {
@@ -235,8 +238,8 @@ resource "google_compute_instance" "hostc" {
   # Start slave ArangoDBstarter and connect to master on hosta
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/setupdisk.sh",
-      "sudo /tmp/setupdisk.sh",
+      "chmod +x /tmp/setup.sh",
+      "sudo /tmp/setup.sh",
       "chmod +x /tmp/start.sh",
       "/tmp/start.sh ${var.arangodb_password} ${self.network_interface.0.address} ${google_compute_instance.hosta.network_interface.0.address}"
     ]
